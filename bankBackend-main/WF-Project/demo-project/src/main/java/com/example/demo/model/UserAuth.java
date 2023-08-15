@@ -18,6 +18,7 @@ public class UserAuth {
     private Customer customer;
 
     @NotNull
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
     @NotNull
@@ -65,5 +66,15 @@ public class UserAuth {
 
     public void setPassword(@NotNull String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "UserAuth{" +
+                "userId=" + userId +
+                ", customer=" + customer +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }
