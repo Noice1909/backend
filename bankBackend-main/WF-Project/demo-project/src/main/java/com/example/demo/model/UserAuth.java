@@ -26,6 +26,9 @@ public class UserAuth {
 
     // Constructors
     public UserAuth() {
+        customer = null;
+        password = "";
+        username = "";
     }
 
     public UserAuth(Long userId, @NotNull Customer customer, @NotNull String username, @NotNull String password) {
