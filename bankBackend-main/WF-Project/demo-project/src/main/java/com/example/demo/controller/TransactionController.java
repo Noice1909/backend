@@ -55,4 +55,8 @@ public class TransactionController {
 		response.put("Transaction has been Deleted", Boolean.TRUE);
 		return response;
 	}
+	@GetMapping("/transactions/{customerId}")
+	public List<Transaction> getTransactionsByCustomerId(@PathVariable Long customerId) {
+		return transactionRepository.findByAccount_Customer_CustomerId(customerId);
+	}
 }

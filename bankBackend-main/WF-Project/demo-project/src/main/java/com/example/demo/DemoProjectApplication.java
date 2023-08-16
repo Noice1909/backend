@@ -10,7 +10,7 @@ public class DemoProjectApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoProjectApplication.class, args);
-		System.out.println("New online banking project");
+		System.out.println("easy online banking project");
 	}
 
 }

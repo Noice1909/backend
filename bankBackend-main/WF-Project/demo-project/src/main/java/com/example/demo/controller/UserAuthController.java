@@ -76,6 +76,7 @@ public class UserAuthController {
             if(userAuth.getPassword().equals(loginIDPass.getPassword())){
                 response.put("success" , true);
                 response.put("message" , "Login successfully");
+                response.put("userAuthData" , userAuth );
             }else{
                 response.put("success", false);
                 response.put("message" , "Password does not match");
