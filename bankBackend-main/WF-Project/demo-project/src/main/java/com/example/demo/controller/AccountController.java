@@ -54,14 +54,5 @@ public class AccountController {
 		response.put("Account has been Deleted", Boolean.TRUE);
 		return response;
 	}
-//	@GetMapping("/accounts/user/{userId}")
-//	public ResponseEntity<List<Account>> getAccountsByUserId(@PathVariable Long userId) {
-//		List<Account> accounts = accountRepository.findByCustomer_UserId(userId);
-//
-//		if (!accounts.isEmpty()) {
-//			return ResponseEntity.ok(accounts);
-//		} else {
-//			return ResponseEntity.notFound().build();
-//		}
-//	}
+
 }

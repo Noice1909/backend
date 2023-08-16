@@ -6,11 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.model.Account;
 
-import java.util.List;
+
 
 @EnableJpaRepositories
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long>{
 
-//    List<Account> findByCustomer_UserId(Long userId);
 }
