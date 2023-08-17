@@ -12,7 +12,7 @@ import com.example.demo.repository.CustomerRepository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1")
 public class CustomerController {
@@ -25,7 +25,13 @@ public class CustomerController {
 		return customerRepository.findAll();
 	}
 
+	@GetMapping("/customers/{id}")
+	public ResponseEntity<Customer> getCustomerById(@PathVariable(value = "id") Long customerId) throws ResourceNotFoundException {
+		Customer customer = customerRepository.findById(customerId)
+				.orElseThrow(() -> new ResourceNotFoundException("Customer not found for this id :: " + customerId));
 
+		return ResponseEntity.ok(customer);
+	}
 	@PostMapping("/customers")
 	public ResponseEntity<Map<String, Object>> createCustomer(@Validated @RequestBody Customer newCustomer) {
 		Customer savedCustomer = customerRepository.save(newCustomer);
