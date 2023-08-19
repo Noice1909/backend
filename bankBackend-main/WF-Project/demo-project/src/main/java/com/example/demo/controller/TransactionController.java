@@ -66,7 +66,7 @@ public class TransactionController {
 		return transactionRepository.findByAccount_Customer_CustomerId(customerId);
 	}
 	@PostMapping("/process")
-	public ResponseEntity<String> processTransaction(@RequestBody Map<String, Object> requestBody) {
+	public ResponseEntity<Map<String, Object>> processTransaction(@RequestBody Map<String, Object> requestBody) {
 
 		// Extract senderAccountId, receiverAccountId, and amount from the request body
 		Long senderAccountId = ((Number) requestBody.get("senderAccountId")).longValue();
@@ -78,16 +78,27 @@ public class TransactionController {
 
 		// Fetch receiver account by receiverAccountId
 		Account receiverAccount = accountRepository.findById(receiverAccountId).orElse(null);
-
+		Map<String, Object> response = new HashMap<>();
 		// Check if sender or receiver account is missing
 		if (senderAccount == null || receiverAccount == null) {
-			return ResponseEntity.badRequest().body("Invalid account(s).");
+			response.put("success",false);
+			response.put("message","Invalid account(s).");
+			return ResponseEntity.ok(response);
+		}
+
+		//Check both account number are different
+		if(senderAccount == receiverAccount){
+			response.put("success",false);
+			response.put("message","Can not send in your own account");
+			return ResponseEntity.ok(response);
 		}
 
 		// Check if sender's balance is sufficient for the transaction
 		BigDecimal senderBalance = senderAccount.getBalance();
 		if (senderBalance.compareTo(amount) < 0) {
-			return ResponseEntity.badRequest().body("Insufficient balance.");
+			response.put("success",false);
+			response.put("message","Insufficient balance.");
+			return ResponseEntity.ok(response);
 		}
 
 		// Deduct amount from sender's account balance and add to receiver's account balance
@@ -101,12 +112,14 @@ public class TransactionController {
 		// Create a new Transaction object and save it in the transaction repository
 		Transaction transaction = new Transaction();
 		transaction.setAccount(senderAccount);
-		transaction.setTransactionType("Transfer");
+		transaction.setTransactionType(requestBody.get("transactionType").toString());
 		transaction.setAmount(amount);
 		transaction.setTransactionDate(new Date());
 		transactionRepository.save(transaction);
 
+		response.put("success",true);
+		response.put("message","Transaction Successful");
 		// Return success response
-		return ResponseEntity.ok("Transaction processed successfully.");
+		return ResponseEntity.ok(response);
 	}
 }

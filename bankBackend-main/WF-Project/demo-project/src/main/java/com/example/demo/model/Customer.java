@@ -44,15 +44,22 @@ public class Customer {
 	@Column(name = "postal_code")
 	private String postalCode;
 
-	@Column(name = "account_limit") // Add the account limit column
-	private int accountLimit;
+	@NotNull
+	@Column(name = "role")
+	private String role;
+
 
 	//Constructor
-
 	public Customer() {
+		fullName = null;
+		email = null;
+		phone = null;
+		address = null;
+		city = null;
+		region = null;
 	}
 
-	public Customer(Long customerId, @NotNull String fullName, @NotNull String email, @NotNull String phone, @NotNull String address, @NotNull String city, @NotNull String region, @NotNull String postalCode, int accountLimit) {
+	public Customer(Long customerId, @NotNull String fullName, @NotNull String email, @NotNull String phone, @NotNull String address, @NotNull String city, @NotNull String region, @NotNull String postalCode) {
 		this.customerId = customerId;
 		this.fullName = fullName;
 		this.email = email;
@@ -61,8 +68,9 @@ public class Customer {
 		this.city = city;
 		this.region = region;
 		this.postalCode = postalCode;
-		this.accountLimit = accountLimit;
+		this.role = "customer";
 	}
+
 
 	//Getter and Setter
 
@@ -74,67 +82,63 @@ public class Customer {
 		this.customerId = customerId;
 	}
 
-	public String getFullName() {
+	public @NotNull String getFullName() {
 		return fullName;
 	}
 
-	public void setFullName(String fullName) {
+	public void setFullName(@NotNull String fullName) {
 		this.fullName = fullName;
 	}
 
-	public String getEmail() {
+	public @NotNull String getEmail() {
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public void setEmail(@NotNull String email) {
 		this.email = email;
 	}
 
-	public String getPhone() {
+	public @NotNull String getPhone() {
 		return phone;
 	}
 
-	public void setPhone(String phone) {
+	public void setPhone(@NotNull String phone) {
 		this.phone = phone;
 	}
 
-	public String getAddress() {
+	public @NotNull String getAddress() {
 		return address;
 	}
 
-	public void setAddress(String address) {
+	public void setAddress(@NotNull String address) {
 		this.address = address;
 	}
 
-	public String getCity() {
+	public @NotNull String getCity() {
 		return city;
 	}
 
-	public void setCity(String city) {
+	public void setCity(@NotNull String city) {
 		this.city = city;
 	}
 
-	public String getRegion() {
+	public @NotNull String getRegion() {
 		return region;
 	}
 
-	public void setRegion(String region) {
+	public void setRegion(@NotNull String region) {
 		this.region = region;
 	}
 
-	public String getPostalCode() {
+	public @NotNull String getPostalCode() {
 		return postalCode;
 	}
 
-	public void setPostalCode(String postalCode) {
+	public void setPostalCode(@NotNull String postalCode) {
 		this.postalCode = postalCode;
 	}
 
-	public int getAccountLimit() {
-		return accountLimit;
-	}
+	public @NotNull String getRole() { return role; }
 
-	public void setAccountLimit(int accountLimit) {
-		this.accountLimit = accountLimit;
-	}
+	public void setRole(@NotNull String role) { this.role = role; }
 }

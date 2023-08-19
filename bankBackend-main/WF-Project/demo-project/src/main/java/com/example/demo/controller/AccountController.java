@@ -31,22 +31,14 @@ public class AccountController {
 
 	@PostMapping("/accounts")
 	public ResponseEntity<Map<String, Object>> createAccount(@Validated @RequestBody Account newAccount) {
-		// Assuming you have a method to check the customer's account limit
-		boolean hasReachedAccountLimit = newAccount.getCustomer().getAccountLimit() > 0;
-
+//		 Assuming you have a method to check the customer's account limit
 		Map<String, Object> response = new HashMap<>();
-		if (hasReachedAccountLimit) {
-			response.put("success", false);
-			response.put("message", "Customer has reached the account limit");
-			return ResponseEntity.badRequest().body(response);
-		} else {
-			newAccount.getCustomer().setAccountLimit(newAccount.getCustomer().getAccountLimit()-1);
 			Account createdAccount = accountRepository.save(newAccount);
 			response.put("success", true);
 			response.put("message", "Account created successfully");
 			response.put("account", createdAccount);
-			return ResponseEntity.ok(response);
-		}
+
+		return ResponseEntity.ok(response);
 	}
 
 	@PutMapping("/accounts/{id}")
@@ -58,6 +50,7 @@ public class AccountController {
 		account.setCustomer(updatedAccount.getCustomer());
 		account.setAccountType(updatedAccount.getAccountType());
 		account.setBalance(updatedAccount.getBalance());
+		account.setStatus(updatedAccount.getStatus());
 		accountRepository.save(account);
 
 		return ResponseEntity.ok(account);
