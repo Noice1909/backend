@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.Customer;
+import com.example.demo.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +21,8 @@ public class AccountController {
 
 	@Autowired
 	private AccountRepository accountRepository;
+	@Autowired
+	private CustomerRepository customerRepository;
 
 	@GetMapping("/accounts")
 	public List<Account> getAllAccounts() {
@@ -26,8 +30,23 @@ public class AccountController {
 	}
 
 	@PostMapping("/accounts")
-	public Account createAccount(@Validated @RequestBody Account newAccount) {
-		return accountRepository.save(newAccount);
+	public ResponseEntity<Map<String, Object>> createAccount(@Validated @RequestBody Account newAccount) {
+		// Assuming you have a method to check the customer's account limit
+		boolean hasReachedAccountLimit = newAccount.getCustomer().getAccountLimit() > 0;
+
+		Map<String, Object> response = new HashMap<>();
+		if (hasReachedAccountLimit) {
+			response.put("success", false);
+			response.put("message", "Customer has reached the account limit");
+			return ResponseEntity.badRequest().body(response);
+		} else {
+			newAccount.getCustomer().setAccountLimit(newAccount.getCustomer().getAccountLimit()-1);
+			Account createdAccount = accountRepository.save(newAccount);
+			response.put("success", true);
+			response.put("message", "Account created successfully");
+			response.put("account", createdAccount);
+			return ResponseEntity.ok(response);
+		}
 	}
 
 	@PutMapping("/accounts/{id}")
@@ -54,5 +73,16 @@ public class AccountController {
 		response.put("Account has been Deleted", Boolean.TRUE);
 		return response;
 	}
+	@GetMapping("/by-customer/{customerId}")
+	public List<Account> getAccountsByCustomer(@PathVariable Long customerId) {
+		// You would need to fetch the customer object by their ID
+		Customer customer = customerRepository.findById(customerId).orElse(null);
 
+		if (customer == null) {
+			// Handle the case where customer is not found
+			return null;
+		}
+
+		return accountRepository.findByCustomer(customer);
+	}
 }

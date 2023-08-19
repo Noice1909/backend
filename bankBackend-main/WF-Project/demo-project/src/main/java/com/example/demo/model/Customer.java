@@ -44,19 +44,15 @@ public class Customer {
 	@Column(name = "postal_code")
 	private String postalCode;
 
+	@Column(name = "account_limit") // Add the account limit column
+	private int accountLimit;
+
 	//Constructor
 
 	public Customer() {
-		fullName = "";
-		email = "";
-		phone = "";
-		address = "";
-		city = "";
-		postalCode = "";
-		region = "";
 	}
 
-	public Customer(Long customerId, @NotNull String fullName, @NotNull String email, @NotNull String phone, @NotNull String address, @NotNull String city, @NotNull String region, @NotNull String postalCode) {
+	public Customer(Long customerId, @NotNull String fullName, @NotNull String email, @NotNull String phone, @NotNull String address, @NotNull String city, @NotNull String region, @NotNull String postalCode, int accountLimit) {
 		this.customerId = customerId;
 		this.fullName = fullName;
 		this.email = email;
@@ -65,9 +61,10 @@ public class Customer {
 		this.city = city;
 		this.region = region;
 		this.postalCode = postalCode;
+		this.accountLimit = accountLimit;
 	}
 
-	// Getters and setters
+	//Getter and Setter
 
 	public Long getCustomerId() {
 		return customerId;
@@ -77,59 +74,67 @@ public class Customer {
 		this.customerId = customerId;
 	}
 
-	public @NotNull String getFullName() {
+	public String getFullName() {
 		return fullName;
 	}
 
-	public void setFullName(@NotNull String fullName) {
+	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
 
-	public @NotNull String getEmail() {
+	public String getEmail() {
 		return email;
 	}
 
-	public void setEmail(@NotNull String email) {
+	public void setEmail(String email) {
 		this.email = email;
 	}
 
-	public @NotNull String getPhone() {
+	public String getPhone() {
 		return phone;
 	}
 
-	public void setPhone(@NotNull String phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 
-	public @NotNull String getAddress() {
+	public String getAddress() {
 		return address;
 	}
 
-	public void setAddress(@NotNull String address) {
+	public void setAddress(String address) {
 		this.address = address;
 	}
 
-	public @NotNull String getCity() {
+	public String getCity() {
 		return city;
 	}
 
-	public void setCity(@NotNull String city) {
+	public void setCity(String city) {
 		this.city = city;
 	}
 
-	public @NotNull String getRegion() {
+	public String getRegion() {
 		return region;
 	}
 
-	public void setRegion(@NotNull String region) {
+	public void setRegion(String region) {
 		this.region = region;
 	}
 
-	public @NotNull String getPostalCode() {
+	public String getPostalCode() {
 		return postalCode;
 	}
 
-	public void setPostalCode(@NotNull String postalCode) {
+	public void setPostalCode(String postalCode) {
 		this.postalCode = postalCode;
+	}
+
+	public int getAccountLimit() {
+		return accountLimit;
+	}
+
+	public void setAccountLimit(int accountLimit) {
+		this.accountLimit = accountLimit;
 	}
 }
