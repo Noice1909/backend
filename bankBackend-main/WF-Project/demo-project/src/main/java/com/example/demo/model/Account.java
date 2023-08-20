@@ -26,19 +26,24 @@ public class Account {
 	@NotNull
 	private BigDecimal balance;
 
+	@NotNull
+	@Column(name = "status")
+	private String status;
+
 	//Constructor
 
 	public Account() {
 		customer = null;
 		accountType = null;
-		balance = null;
+		balance = BigDecimal.valueOf(0);
+		status = null;
 	}
 
-	public Account(Long accountId, @NotNull Customer customer, @NotNull String accountType, @NotNull BigDecimal balance) {
-		this.accountId = accountId;
+	public Account(@NotNull Customer customer, @NotNull String accountType, @NotNull BigDecimal balance, @NotNull String status) {
 		this.customer = customer;
 		this.accountType = accountType;
 		this.balance = balance;
+		this.status = status;
 	}
 
 	// Getters and setters
@@ -72,5 +77,13 @@ public class Account {
 
 	public void setBalance(@NotNull BigDecimal balance) {
 		this.balance = balance;
+	}
+
+	public @NotNull String getStatus() {
+		return status;
+	}
+
+	public void setStatus(@NotNull String status) {
+		this.status = status;
 	}
 }

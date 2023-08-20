@@ -36,6 +36,7 @@ public class CustomerController {
 	public ResponseEntity<Map<String, Object>> createCustomer(@Validated @RequestBody Customer newCustomer) {
 		Customer savedCustomer = customerRepository.save(newCustomer);
 		System.out.println("inside the controller");
+		System.out.println(newCustomer);
 		Map<String, Object> response = new HashMap<>();
 		response.put("success", true);
 		response.put("message", "Customer created successfully");

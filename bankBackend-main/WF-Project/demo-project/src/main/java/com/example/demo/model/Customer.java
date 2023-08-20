@@ -44,16 +44,19 @@ public class Customer {
 	@Column(name = "postal_code")
 	private String postalCode;
 
-	//Constructor
+	@NotNull
+	@Column(name = "role")
+	private String role;
 
+
+	//Constructor
 	public Customer() {
-		fullName = "";
-		email = "";
-		phone = "";
-		address = "";
-		city = "";
-		postalCode = "";
-		region = "";
+		fullName = null;
+		email = null;
+		phone = null;
+		address = null;
+		city = null;
+		region = null;
 	}
 
 	public Customer(Long customerId, @NotNull String fullName, @NotNull String email, @NotNull String phone, @NotNull String address, @NotNull String city, @NotNull String region, @NotNull String postalCode) {
@@ -65,9 +68,11 @@ public class Customer {
 		this.city = city;
 		this.region = region;
 		this.postalCode = postalCode;
+		this.role = "customer";
 	}
 
-	// Getters and setters
+
+	//Getter and Setter
 
 	public Long getCustomerId() {
 		return customerId;
@@ -132,4 +137,8 @@ public class Customer {
 	public void setPostalCode(@NotNull String postalCode) {
 		this.postalCode = postalCode;
 	}
+
+	public @NotNull String getRole() { return role; }
+
+	public void setRole(@NotNull String role) { this.role = role; }
 }

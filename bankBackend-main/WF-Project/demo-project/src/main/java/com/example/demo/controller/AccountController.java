@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.Customer;
+import com.example.demo.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +21,8 @@ public class AccountController {
 
 	@Autowired
 	private AccountRepository accountRepository;
+	@Autowired
+	private CustomerRepository customerRepository;
 
 	@GetMapping("/accounts")
 	public List<Account> getAllAccounts() {
@@ -26,8 +30,14 @@ public class AccountController {
 	}
 
 	@PostMapping("/accounts")
-	public Account createAccount(@Validated @RequestBody Account newAccount) {
-		return accountRepository.save(newAccount);
+	public ResponseEntity<Map<String, Object>> createAccount(@Validated @RequestBody Account newAccount) {
+		Map<String, Object> response = new HashMap<>();
+			Account createdAccount = accountRepository.save(newAccount);
+			response.put("success", true);
+			response.put("message", "Account created successfully");
+			response.put("account", createdAccount);
+
+		return ResponseEntity.ok(response);
 	}
 
 	@PutMapping("/accounts/{id}")
@@ -39,6 +49,18 @@ public class AccountController {
 		account.setCustomer(updatedAccount.getCustomer());
 		account.setAccountType(updatedAccount.getAccountType());
 		account.setBalance(updatedAccount.getBalance());
+		account.setStatus(updatedAccount.getStatus());
+		accountRepository.save(account);
+
+		return ResponseEntity.ok(account);
+	}
+	@PutMapping("/accounts/{id}/status")
+	public ResponseEntity<Account> updateAccountStatus(@PathVariable(value = "id") Long accountId,
+													   @Validated @RequestBody String newStatus) throws ResourceNotFoundException {
+		Account account = accountRepository.findById(accountId)
+				.orElseThrow(() -> new ResourceNotFoundException("Account not found for this id :: " + accountId));
+
+		account.setStatus(newStatus);
 		accountRepository.save(account);
 
 		return ResponseEntity.ok(account);
@@ -54,5 +76,16 @@ public class AccountController {
 		response.put("Account has been Deleted", Boolean.TRUE);
 		return response;
 	}
+	@GetMapping("/by-customer/{customerId}")
+	public List<Account> getAccountsByCustomer(@PathVariable Long customerId) {
+		// You would need to fetch the customer object by their ID
+		Customer customer = customerRepository.findById(customerId).orElse(null);
 
+		if (customer == null) {
+			// Handle the case where customer is not found
+			return null;
+		}
+
+		return accountRepository.findByCustomer(customer);
+	}
 }
