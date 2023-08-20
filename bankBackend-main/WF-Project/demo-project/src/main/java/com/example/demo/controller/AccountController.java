@@ -31,7 +31,6 @@ public class AccountController {
 
 	@PostMapping("/accounts")
 	public ResponseEntity<Map<String, Object>> createAccount(@Validated @RequestBody Account newAccount) {
-//		 Assuming you have a method to check the customer's account limit
 		Map<String, Object> response = new HashMap<>();
 			Account createdAccount = accountRepository.save(newAccount);
 			response.put("success", true);
@@ -51,6 +50,17 @@ public class AccountController {
 		account.setAccountType(updatedAccount.getAccountType());
 		account.setBalance(updatedAccount.getBalance());
 		account.setStatus(updatedAccount.getStatus());
+		accountRepository.save(account);
+
+		return ResponseEntity.ok(account);
+	}
+	@PutMapping("/accounts/{id}/status")
+	public ResponseEntity<Account> updateAccountStatus(@PathVariable(value = "id") Long accountId,
+													   @Validated @RequestBody String newStatus) throws ResourceNotFoundException {
+		Account account = accountRepository.findById(accountId)
+				.orElseThrow(() -> new ResourceNotFoundException("Account not found for this id :: " + accountId));
+
+		account.setStatus(newStatus);
 		accountRepository.save(account);
 
 		return ResponseEntity.ok(account);

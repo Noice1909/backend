@@ -89,4 +89,12 @@ public class Transaction {
 	public void setTransactionDate(@NotNull Date transactionDate) {
 		this.transactionDate = transactionDate;
 	}
+
+	public void setAmountWithSign(@NotNull BigDecimal amount, @NotNull String transactionType) {
+		if ("deducted".equalsIgnoreCase(transactionType)) {
+			this.amount = amount.negate();
+		} else { //credited
+			this.amount = amount;
+		}
+	}
 }

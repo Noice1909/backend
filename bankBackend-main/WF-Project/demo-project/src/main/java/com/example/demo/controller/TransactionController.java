@@ -85,14 +85,30 @@ public class TransactionController {
 			response.put("message","Invalid account(s).");
 			return ResponseEntity.ok(response);
 		}
-
+		//senders active status is active or not
+		if(!senderAccount.getStatus().equals("active")){
+			response.put("success",false);
+			response.put("message","It seems your account status is not active. Please contact branch if it is a mistake.");
+			return ResponseEntity.ok(response);
+		}
+		//receiver's active status is active or not
+		if(!receiverAccount.getStatus().equals("active")){
+			response.put("success",false);
+			response.put("message","Receiver's account is not active.");
+			return ResponseEntity.ok(response);
+		}
 		//Check both account number are different
 		if(senderAccount == receiverAccount){
 			response.put("success",false);
 			response.put("message","Can not send in your own account");
 			return ResponseEntity.ok(response);
 		}
-
+		//Can not send 0 amount
+		if(amount.compareTo(BigDecimal.ZERO)==0){
+			response.put("success",false);
+			response.put("message","Can not send 0 $");
+			return ResponseEntity.ok(response);
+		}
 		// Check if sender's balance is sufficient for the transaction
 		BigDecimal senderBalance = senderAccount.getBalance();
 		if (senderBalance.compareTo(amount) < 0) {
@@ -110,12 +126,19 @@ public class TransactionController {
 		accountRepository.save(receiverAccount);
 
 		// Create a new Transaction object and save it in the transaction repository
-		Transaction transaction = new Transaction();
-		transaction.setAccount(senderAccount);
-		transaction.setTransactionType(requestBody.get("transactionType").toString());
-		transaction.setAmount(amount);
-		transaction.setTransactionDate(new Date());
-		transactionRepository.save(transaction);
+		Transaction SenderTransaction = new Transaction();
+		SenderTransaction.setAccount(senderAccount);
+		SenderTransaction.setTransactionType(requestBody.get("transactionType").toString());
+		SenderTransaction.setAmountWithSign(amount,"deducted");
+		SenderTransaction.setTransactionDate(new Date());
+		transactionRepository.save(SenderTransaction);
+
+		Transaction receiverTransaction = new Transaction();
+		receiverTransaction.setAccount(receiverAccount);
+		receiverTransaction.setTransactionType(requestBody.get("transactionType").toString());
+		receiverTransaction.setAmountWithSign(amount,"credited");
+		receiverTransaction.setTransactionDate(new Date());
+		transactionRepository.save(receiverTransaction);
 
 		response.put("success",true);
 		response.put("message","Transaction Successful");
