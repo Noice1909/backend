@@ -1,8 +1,9 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
+//import jakarta.persistence.*;
 import org.jetbrains.annotations.NotNull;
 
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
